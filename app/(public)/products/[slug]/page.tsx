@@ -86,6 +86,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   src={allImages[0]}
                   alt={typedProduct.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-contain p-4"
                   priority
                 />
@@ -108,6 +109,7 @@ export default async function ProductDetailPage({ params }: Props) {
                       src={img}
                       alt={`${typedProduct.name} - ${i + 1}`}
                       fill
+                      sizes="80px"
                       className="object-contain p-1"
                     />
                   </div>

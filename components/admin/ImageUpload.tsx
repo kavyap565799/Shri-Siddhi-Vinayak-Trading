@@ -77,6 +77,7 @@ export function ImageUpload({
                 src={url}
                 alt={`Upload ${i + 1}`}
                 fill
+                sizes="96px"
                 className="object-cover"
               />
               <button

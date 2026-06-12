@@ -44,6 +44,7 @@ export function BrandScrollBanner({ brands }: BrandScrollBannerProps) {
                   width={160}
                   height={64}
                   className="h-12 w-auto max-w-full object-contain opacity-90 transition-all hover:opacity-100"
+                  style={{ width: 'auto' }}
                 />
               ) : (
                 <span className="text-lg font-bold text-text-muted/40 transition-colors hover:text-navy">
