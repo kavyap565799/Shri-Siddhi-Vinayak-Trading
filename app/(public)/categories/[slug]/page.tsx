@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { ProductGrid } from '@/components/products/ProductGrid';
+import { LOCAL_CATEGORIES } from '@/lib/constants';
 import type { Category, ProductWithRelations } from '@/types';
 
 interface Props {
@@ -13,11 +14,13 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const supabase = await createClient();
-  const { data: category } = await supabase
+  const { data: dbCategory } = await supabase
     .from('categories')
     .select('name, description')
     .eq('slug', slug)
     .single();
+
+  const category = dbCategory || LOCAL_CATEGORIES.find(c => c.slug === slug);
 
   if (!category) return { title: 'Category Not Found' };
   return {
@@ -30,11 +33,13 @@ export default async function CategoryDetailPage({ params }: Props) {
   const { slug } = await params;
   const supabase = await createClient();
 
-  const { data: category } = await supabase
+  const { data: dbCategory } = await supabase
     .from('categories')
     .select('*')
     .eq('slug', slug)
     .single();
+
+  const category = dbCategory || LOCAL_CATEGORIES.find(c => c.slug === slug);
 
   if (!category) notFound();
 

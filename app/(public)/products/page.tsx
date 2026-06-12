@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import { ProductGrid } from '@/components/products/ProductGrid';
 import { ProductFilter } from '@/components/products/ProductFilter';
-import { getMergedBrands } from '@/lib/constants';
+import { getMergedBrands, getMergedCategories } from '@/lib/constants';
 import type { ProductWithRelations, Brand, Category } from '@/types';
 
 export const metadata: Metadata = {
@@ -68,7 +68,7 @@ export default async function ProductsPage({ searchParams }: Props) {
 
   const products = (productsRes.data || []) as ProductWithRelations[];
   const brands = getMergedBrands(brandsRes.data || []) as Brand[];
-  const categories = (categoriesRes.data || []) as Category[];
+  const categories = getMergedCategories(categoriesRes.data || []) as Category[];
 
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">

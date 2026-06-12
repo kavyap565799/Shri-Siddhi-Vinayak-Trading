@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Wrench, Zap, Shield, Flame, Package, Ruler } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
+import { getMergedCategories } from '@/lib/constants';
 import type { Category } from '@/types';
 
 export const metadata: Metadata = {
@@ -36,7 +37,7 @@ export default async function CategoriesPage() {
     .is('parent_id', null)
     .order('display_order', { ascending: true });
 
-  const allCategories = (categories || []) as Category[];
+  const allCategories = getMergedCategories(categories || []);
 
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">

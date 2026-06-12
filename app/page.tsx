@@ -9,7 +9,7 @@ import { EnquirySection } from '@/components/landing/EnquirySection';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingButtons } from '@/components/layout/FloatingButtons';
-import { getMergedBrands } from '@/lib/constants';
+import { getMergedBrands, getMergedCategories } from '@/lib/constants';
 import type { Brand, Category, ProductWithRelations } from '@/types';
 
 async function getPageData() {
@@ -40,7 +40,7 @@ async function getPageData() {
 
   return {
     brands: getMergedBrands(brandsRes.data || []) as Brand[],
-    categories: (categoriesRes.data || []) as Category[],
+    categories: getMergedCategories(categoriesRes.data || []) as Category[],
     products: (productsRes.data || []) as ProductWithRelations[],
   };
 }

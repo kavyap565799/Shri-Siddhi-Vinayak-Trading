@@ -149,4 +149,26 @@ DO UPDATE SET
   is_featured = EXCLUDED.is_featured,
   display_order = EXCLUDED.display_order;
 
+-- Seed Categories data
+INSERT INTO categories (id, name, slug, description, icon_url, display_order)
+VALUES
+  ('550e8400-e29b-41d4-a716-446655440001', 'Industrial Tools', 'industrial-tools', 'Power Tools, Hand Tools, Pneumatic Tools, Hydraulic Tools. High-performance tools engineered for industrial manufacturing, assembly, and heavy-duty applications.', '/images/categories/industrial-tools.png', 1),
+  ('550e8400-e29b-41d4-a716-446655440002', 'Hand Tools', 'hand-tools', 'Pliers, Screwdrivers, Wrenches & Spanners, Hammers, Chisels, Saws. Professional-grade manual tools for precision, durability, and daily mechanical tasks.', '/images/categories/hand-tools.png', 2),
+  ('550e8400-e29b-41d4-a716-446655440003', 'Power Tools', 'power-tools', 'Drills, Grinders, Rotary Hammers, Demolition Hammers, Sanders, Polishers. Electric and cordless power tools offering high torque, reliability, and precision for professional trades.', '/images/categories/power-tools.png', 3),
+  ('550e8400-e29b-41d4-a716-446655440004', 'Welding', 'welding', 'Welding Machines, Welding Electrodes, Filler Wires, TIG Torches, MIG Guns. Industrial welding equipment, electrodes, filler materials, and accessories for robust metal fabrication.', '/images/categories/welding.png', 4),
+  ('550e8400-e29b-41d4-a716-446655440005', 'Safety Equipment', 'safety-equipment', 'Safety Helmets, Safety Harnesses, Safety Goggles, Safety Shoes, Ear Protection, Protective Gloves. Certified personal protective equipment (PPE) designed to ensure maximum safety on site.', '/images/categories/safety-equipment.png', 5),
+  ('550e8400-e29b-41d4-a716-446655440006', 'Electrical', 'electrical', 'House Wires, Industrial Cables, Flexible Cables, Switchgears, Contactors. Premium electrical wiring, heavy-duty industrial cables, and control gear for power distribution.', '/images/categories/electrical.png', 6),
+  ('550e8400-e29b-41d4-a716-446655440007', 'Construction Materials', 'construction-materials', 'Wire Ropes, Synthetic Ropes, Chains & Slings, Shackles, Turnbuckles. High-strength lifting rigging, wire ropes, chains, and structural materials for site construction.', '/images/categories/construction-materials.png', 7),
+  ('550e8400-e29b-41d4-a716-446655440008', 'Abrasives', 'abrasives', 'Cutting Discs, Grinding Wheels, Flap Discs, Sandpaper, Wire Brushes. High-performance cutting, grinding, and finishing abrasives for precise metal and stone work.', '/images/categories/abrasives.png', 8),
+  ('550e8400-e29b-41d4-a716-446655440009', 'Industrial Consumables', 'industrial-consumables', 'Welding Consumables, Abrasive Consumables, Adhesives & Sealants, Lubricants, Cleaning Agents. Essential day-to-day workshop consumables, chemical adhesives, sealants, and maintenance supplies.', '/images/categories/industrial-consumables.png', 9),
+  ('550e8400-e29b-41d4-a716-446655440010', 'Hardware Products', 'hardware-products', 'Bolts & Nuts, Screws & Anchors, Clamps & Brackets, Washers, Rivets. Industrial-grade fasteners, structural hardware, anchors, and fixing products.', '/images/categories/hardware-products.png', 10),
+  ('550e8400-e29b-41d4-a716-446655440011', 'Measuring Instruments', 'measuring-instruments', 'Multimeters, Clamp Meters, Laser Meters, Vernier Calipers, Micrometers. High-accuracy electrical and dimensional measurement tools for testing and calibration.', '/images/categories/measuring-instruments.png', 11)
+ON CONFLICT (slug)
+DO UPDATE SET
+  name = EXCLUDED.name,
+  description = EXCLUDED.description,
+  icon_url = EXCLUDED.icon_url,
+  display_order = EXCLUDED.display_order;
+
+
 
