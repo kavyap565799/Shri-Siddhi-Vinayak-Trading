@@ -2,10 +2,11 @@
 -- Shri Siddhi Vinayak Trading Co.
 -- Database Schema for Supabase
 -- Run this in your Supabase SQL Editor
+-- This script is safe to run multiple times
 -- =============================================
 
 -- BRANDS table
-CREATE TABLE brands (
+CREATE TABLE IF NOT EXISTS brands (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
@@ -17,7 +18,7 @@ CREATE TABLE brands (
 );
 
 -- CATEGORIES table
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
@@ -29,7 +30,7 @@ CREATE TABLE categories (
 );
 
 -- PRODUCTS table
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
@@ -48,7 +49,7 @@ CREATE TABLE products (
 );
 
 -- ENQUIRIES table
-CREATE TABLE enquiries (
+CREATE TABLE IF NOT EXISTS enquiries (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   phone TEXT NOT NULL,
@@ -61,17 +62,17 @@ CREATE TABLE enquiries (
 );
 
 -- Indexes for common queries
-CREATE INDEX idx_brands_slug ON brands(slug);
-CREATE INDEX idx_brands_featured ON brands(is_featured) WHERE is_featured = true;
-CREATE INDEX idx_categories_slug ON categories(slug);
-CREATE INDEX idx_categories_parent ON categories(parent_id);
-CREATE INDEX idx_products_slug ON products(slug);
-CREATE INDEX idx_products_brand ON products(brand_id);
-CREATE INDEX idx_products_category ON products(category_id);
-CREATE INDEX idx_products_featured ON products(is_featured) WHERE is_featured = true;
-CREATE INDEX idx_products_available ON products(is_available) WHERE is_available = true;
-CREATE INDEX idx_enquiries_status ON enquiries(status);
-CREATE INDEX idx_enquiries_created ON enquiries(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_brands_slug ON brands(slug);
+CREATE INDEX IF NOT EXISTS idx_brands_featured ON brands(is_featured) WHERE is_featured = true;
+CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
+CREATE INDEX IF NOT EXISTS idx_categories_parent ON categories(parent_id);
+CREATE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
+CREATE INDEX IF NOT EXISTS idx_products_brand ON products(brand_id);
+CREATE INDEX IF NOT EXISTS idx_products_category ON products(category_id);
+CREATE INDEX IF NOT EXISTS idx_products_featured ON products(is_featured) WHERE is_featured = true;
+CREATE INDEX IF NOT EXISTS idx_products_available ON products(is_available) WHERE is_available = true;
+CREATE INDEX IF NOT EXISTS idx_enquiries_status ON enquiries(status);
+CREATE INDEX IF NOT EXISTS idx_enquiries_created ON enquiries(created_at DESC);
 
 -- Row Level Security
 ALTER TABLE brands ENABLE ROW LEVEL SECURITY;
@@ -80,17 +81,30 @@ ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enquiries ENABLE ROW LEVEL SECURITY;
 
 -- Public can read brands, categories, products
+DROP POLICY IF EXISTS "Public read brands" ON brands;
 CREATE POLICY "Public read brands" ON brands FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public read categories" ON categories;
 CREATE POLICY "Public read categories" ON categories FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public read products" ON products;
 CREATE POLICY "Public read products" ON products FOR SELECT USING (true);
 
 -- Public can insert enquiries
+DROP POLICY IF EXISTS "Public insert enquiries" ON enquiries;
 CREATE POLICY "Public insert enquiries" ON enquiries FOR INSERT WITH CHECK (true);
 
 -- Authenticated users can do everything
+DROP POLICY IF EXISTS "Admin write brands" ON brands;
 CREATE POLICY "Admin write brands" ON brands FOR ALL USING (auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "Admin write categories" ON categories;
 CREATE POLICY "Admin write categories" ON categories FOR ALL USING (auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "Admin write products" ON products;
 CREATE POLICY "Admin write products" ON products FOR ALL USING (auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "Admin manage enquiries" ON enquiries;
 CREATE POLICY "Admin manage enquiries" ON enquiries FOR ALL USING (auth.role() = 'authenticated');
 
 -- Updated_at trigger for products
@@ -102,6 +116,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS products_updated_at ON products;
 CREATE TRIGGER products_updated_at
   BEFORE UPDATE ON products
   FOR EACH ROW
@@ -112,17 +127,20 @@ CREATE TRIGGER products_updated_at
 -- =============================================
 
 -- Allow public read access to media buckets
+DROP POLICY IF EXISTS "Allow public read access to media buckets" ON storage.objects;
 CREATE POLICY "Allow public read access to media buckets"
 ON storage.objects FOR SELECT
 USING (bucket_id IN ('product-images', 'brand-logos', 'category-icons'));
 
 -- Allow authenticated users (admin) to upload files
+DROP POLICY IF EXISTS "Allow authenticated inserts" ON storage.objects;
 CREATE POLICY "Allow authenticated inserts"
 ON storage.objects FOR INSERT
 TO authenticated
 WITH CHECK (bucket_id IN ('product-images', 'brand-logos', 'category-icons'));
 
 -- Allow authenticated users (admin) to update files
+DROP POLICY IF EXISTS "Allow authenticated updates" ON storage.objects;
 CREATE POLICY "Allow authenticated updates"
 ON storage.objects FOR UPDATE
 TO authenticated
@@ -130,6 +148,7 @@ USING (bucket_id IN ('product-images', 'brand-logos', 'category-icons'))
 WITH CHECK (bucket_id IN ('product-images', 'brand-logos', 'category-icons'));
 
 -- Allow authenticated users (admin) to delete files
+DROP POLICY IF EXISTS "Allow authenticated deletes" ON storage.objects;
 CREATE POLICY "Allow authenticated deletes"
 ON storage.objects FOR DELETE
 TO authenticated
@@ -169,6 +188,3 @@ DO UPDATE SET
   description = EXCLUDED.description,
   icon_url = EXCLUDED.icon_url,
   display_order = EXCLUDED.display_order;
-
-
-
