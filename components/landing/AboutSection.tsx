@@ -58,7 +58,7 @@ export function AboutSection() {
             <div className="mt-6 space-y-4 text-text-muted leading-relaxed">
               <p>
                 <span className="font-semibold text-text-dark">Shri Siddhi Vinayak Trading Co.</span>{' '}
-                has been a trusted name in industrial tools and equipment for over 25 years in Godhra, Gujarat.
+                has been a trusted name in industrial tools and equipment for over 25 years in Motikhavdi, Jamnagar, Gujarat.
               </p>
               <p>
                 We are your one-stop destination for high-quality industrial hand tools, electric power tools,

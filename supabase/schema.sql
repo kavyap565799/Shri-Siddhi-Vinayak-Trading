@@ -135,3 +135,18 @@ ON storage.objects FOR DELETE
 TO authenticated
 USING (bucket_id IN ('product-images', 'brand-logos', 'category-icons'));
 
+-- Seed Brands data
+INSERT INTO brands (id, name, slug, logo_url, is_featured, display_order)
+VALUES 
+  ('702f8471-1c63-41bd-b651-d5e859320d1f', 'Bosch', 'bosch', '/images/brands/bosch.png', true, 1),
+  ('fc2e1f0d-7e36-4fbc-ade5-a1acbee57bb2', 'ESAB', 'esab', '/images/brands/esab.png', true, 2),
+  ('7e59648d-8b35-46d4-a33e-c108ac4b167a', 'KARAM', 'karam', '/images/brands/karam.png', true, 3),
+  ('2a8a8165-8b35-46d4-a33e-c108ac4b167b', 'Havells', 'havells', '/images/brands/havells.png', true, 4),
+  ('1b9c928d-8b35-46d4-a33e-c108ac4b167c', 'L&T', 'l-and-t', '/images/brands/l-and-t.png', true, 5)
+ON CONFLICT (slug) 
+DO UPDATE SET 
+  logo_url = EXCLUDED.logo_url,
+  is_featured = EXCLUDED.is_featured,
+  display_order = EXCLUDED.display_order;
+
+

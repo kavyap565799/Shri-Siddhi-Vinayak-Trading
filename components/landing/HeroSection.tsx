@@ -159,7 +159,7 @@ export function HeroSection() {
               transition={{ delay: 0.8, duration: 0.5 }}
               className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-navy px-6 py-2 text-sm font-semibold text-white shadow-lg"
             >
-              📍 Godhra, Gujarat
+              📍 Motikhavdi, Jamnagar
             </motion.div>
           </div>
         </motion.div>
