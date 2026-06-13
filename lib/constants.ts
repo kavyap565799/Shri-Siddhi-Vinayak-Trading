@@ -152,22 +152,13 @@ export interface Category {
 
 export const LOCAL_CATEGORIES: Category[] = [
   {
-    id: '550e8400-e29b-41d4-a716-446655440001',
-    name: 'Industrial Tools',
-    slug: 'industrial-tools',
-    description: 'Power Tools, Hand Tools, Pneumatic Tools, Hydraulic Tools. High-performance tools engineered for industrial manufacturing, assembly, and heavy-duty applications.',
-    icon_url: '/images/categories/industrial-tools.png',
-    parent_id: null,
-    display_order: 1
-  },
-  {
     id: '550e8400-e29b-41d4-a716-446655440002',
     name: 'Hand Tools',
     slug: 'hand-tools',
     description: 'Pliers, Screwdrivers, Wrenches & Spanners, Hammers, Chisels, Saws. Professional-grade manual tools for precision, durability, and daily mechanical tasks.',
     icon_url: '/images/categories/hand-tools.png',
     parent_id: null,
-    display_order: 2
+    display_order: 1
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440003',
@@ -176,7 +167,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'Drills, Grinders, Rotary Hammers, Demolition Hammers, Sanders, Polishers. Electric and cordless power tools offering high torque, reliability, and precision for professional trades.',
     icon_url: '/images/categories/power-tools.png',
     parent_id: null,
-    display_order: 3
+    display_order: 2
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440004',
@@ -185,7 +176,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'Welding Machines, Welding Electrodes, Filler Wires, TIG Torches, MIG Guns. Industrial welding equipment, electrodes, filler materials, and accessories for robust metal fabrication.',
     icon_url: '/images/categories/welding.png',
     parent_id: null,
-    display_order: 4
+    display_order: 3
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440005',
@@ -194,7 +185,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'Safety Helmets, Safety Harnesses, Safety Goggles, Safety Shoes, Ear Protection, Protective Gloves. Certified personal protective equipment (PPE) designed to ensure maximum safety on site.',
     icon_url: '/images/categories/safety-equipment.png',
     parent_id: null,
-    display_order: 5
+    display_order: 4
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440006',
@@ -203,7 +194,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'House Wires, Industrial Cables, Flexible Cables, Switchgears, Contactors. Premium electrical wiring, heavy-duty industrial cables, and control gear for power distribution.',
     icon_url: '/images/categories/electrical.png',
     parent_id: null,
-    display_order: 6
+    display_order: 5
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440007',
@@ -212,7 +203,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'Wire Ropes, Synthetic Ropes, Chains & Slings, Shackles, Turnbuckles. High-strength lifting rigging, wire ropes, chains, and structural materials for site construction.',
     icon_url: '/images/categories/construction-materials.png',
     parent_id: null,
-    display_order: 7
+    display_order: 6
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440008',
@@ -221,7 +212,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'Cutting Discs, Grinding Wheels, Flap Discs, Sandpaper, Wire Brushes. High-performance cutting, grinding, and finishing abrasives for precise metal and stone work.',
     icon_url: '/images/categories/abrasives.png',
     parent_id: null,
-    display_order: 8
+    display_order: 7
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440009',
@@ -230,7 +221,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'Welding Consumables, Abrasive Consumables, Adhesives & Sealants, Lubricants, Cleaning Agents. Essential day-to-day workshop consumables, chemical adhesives, sealants, and maintenance supplies.',
     icon_url: '/images/categories/industrial-consumables.png',
     parent_id: null,
-    display_order: 9
+    display_order: 8
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440010',
@@ -239,7 +230,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'Bolts & Nuts, Screws & Anchors, Clamps & Brackets, Washers, Rivets. Industrial-grade fasteners, structural hardware, anchors, and fixing products.',
     icon_url: '/images/categories/hardware-products.png',
     parent_id: null,
-    display_order: 10
+    display_order: 9
   },
   {
     id: '550e8400-e29b-41d4-a716-446655440011',
@@ -248,7 +239,7 @@ export const LOCAL_CATEGORIES: Category[] = [
     description: 'Multimeters, Clamp Meters, Laser Meters, Vernier Calipers, Micrometers. High-accuracy electrical and dimensional measurement tools for testing and calibration.',
     icon_url: '/images/categories/measuring-instruments.png',
     parent_id: null,
-    display_order: 11
+    display_order: 10
   }
 ];
 
