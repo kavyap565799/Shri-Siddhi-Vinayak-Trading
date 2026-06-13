@@ -5,7 +5,7 @@ import { useRef, useEffect, useState } from 'react';
 import { Award, Package, Building, FileCheck } from 'lucide-react';
 
 const STATS = [
-  { icon: Award, label: 'Years of Service', value: 25, suffix: '+' },
+  { icon: Award, label: 'Years of Service', value: 15, suffix: '+' },
   { icon: Package, label: 'Products Available', value: 1000, suffix: '+' },
   { icon: Building, label: 'Trusted Brands', value: 100, suffix: '+' },
   { icon: FileCheck, label: 'GST Registered', value: 0, suffix: '', display: 'GST' },
@@ -58,7 +58,7 @@ export function AboutSection() {
             <div className="mt-6 space-y-4 text-text-muted leading-relaxed">
               <p>
                 <span className="font-semibold text-text-dark">Shri Siddhi Vinayak Trading Co.</span>{' '}
-                has been a trusted name in industrial tools and equipment for over 25 years in Motikhavdi, Jamnagar, Gujarat.
+                has been a trusted name in industrial tools and equipment for over 15 years in Motikhavdi, Jamnagar, Gujarat.
               </p>
               <p>
                 We are your one-stop destination for high-quality industrial hand tools, electric power tools,

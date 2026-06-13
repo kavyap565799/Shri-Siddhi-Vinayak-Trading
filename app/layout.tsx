@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: '%s | Shri Siddhi Vinayak Trading Co.',
   },
   description:
-    'Your trusted partner for industrial tools, electric power tools, welding accessories, project materials, and safety equipment in Motikhavdi, Jamnagar, Gujarat. 25+ years of service, 1000+ products, 100+ brands.',
+    'Your trusted partner for industrial tools, electric power tools, welding accessories, project materials, and safety equipment in Motikhavdi, Jamnagar, Gujarat. 15+ years of service, 1000+ products, 100+ brands.',
   keywords: [
     'industrial tools',
     'power tools',

@@ -40,7 +40,7 @@ export function HeroSection() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-navy/10 bg-white px-4 py-2 shadow-sm">
             <span className="h-2 w-2 rounded-full bg-whatsapp animate-pulse" />
             <span className="text-xs font-medium text-text-muted">
-              25+ Years of Trusted Service
+              15+ Years of Trusted Service
             </span>
           </div>
 
