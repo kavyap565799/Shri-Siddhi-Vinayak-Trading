@@ -1,24 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Wrench, Zap, Shield, Flame, Package, Ruler } from 'lucide-react';
 import type { Category } from '@/types';
+import { getCategoryIcon } from '@/lib/constants';
 
 interface CategoriesSectionProps {
   categories: Category[];
 }
-
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  default: <Package className="h-8 w-8" />,
-  'hand-tools': <Wrench className="h-8 w-8" />,
-  'power-tools': <Zap className="h-8 w-8" />,
-  'safety-equipment': <Shield className="h-8 w-8" />,
-  'welding-accessories': <Flame className="h-8 w-8" />,
-  'project-materials': <Ruler className="h-8 w-8" />,
-  'industrial-tools': <Wrench className="h-8 w-8" />,
-};
 
 const GRADIENT_COLORS = [
   'from-blue-500/10 to-blue-600/5',
@@ -61,7 +50,7 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
           {categories.map((category, index) => {
             const gradientColor = GRADIENT_COLORS[index % GRADIENT_COLORS.length];
             const iconColor = ICON_COLORS[index % ICON_COLORS.length];
-            const icon = CATEGORY_ICONS[category.slug] || CATEGORY_ICONS.default;
+            const IconComponent = getCategoryIcon(category.name, category.slug);
 
             return (
               <motion.div
@@ -76,17 +65,7 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
                   className={`group flex items-center gap-4 rounded-xl bg-gradient-to-br ${gradientColor} border border-white/50 p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg`}
                 >
                   <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl ${iconColor} transition-transform group-hover:scale-110`}>
-                    {category.icon_url ? (
-                      <Image
-                        src={category.icon_url}
-                        alt={category.name}
-                        width={32}
-                        height={32}
-                        className="h-8 w-8 object-contain"
-                      />
-                    ) : (
-                      icon
-                    )}
+                    <IconComponent className="h-8 w-8" />
                   </div>
                   <div>
                     <h3 className="font-[var(--font-heading)] text-lg font-bold text-text-dark group-hover:text-navy transition-colors">

@@ -1,23 +1,12 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Wrench, Zap, Shield, Flame, Package, Ruler } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
-import { getMergedCategories } from '@/lib/constants';
+import { getMergedCategories, getCategoryIcon } from '@/lib/constants';
 import type { Category } from '@/types';
 
 export const metadata: Metadata = {
   title: 'All Categories',
   description: 'Browse products by category — industrial tools, power tools, welding, safety equipment, and more.',
-};
-
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  default: <Package className="h-8 w-8" />,
-  'hand-tools': <Wrench className="h-8 w-8" />,
-  'power-tools': <Zap className="h-8 w-8" />,
-  'safety-equipment': <Shield className="h-8 w-8" />,
-  'welding-accessories': <Flame className="h-8 w-8" />,
-  'project-materials': <Ruler className="h-8 w-8" />,
 };
 
 const ICON_COLORS = [
@@ -54,7 +43,7 @@ export default async function CategoriesPage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {allCategories.map((category, index) => {
             const iconColor = ICON_COLORS[index % ICON_COLORS.length];
-            const icon = CATEGORY_ICONS[category.slug] || CATEGORY_ICONS.default;
+            const IconComponent = getCategoryIcon(category.name, category.slug);
 
             return (
               <Link
@@ -65,17 +54,7 @@ export default async function CategoriesPage() {
                 <div
                   className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl ${iconColor} transition-transform group-hover:scale-110`}
                 >
-                  {category.icon_url ? (
-                    <Image
-                      src={category.icon_url}
-                      alt={category.name}
-                      width={32}
-                      height={32}
-                      className="h-8 w-8 object-contain"
-                    />
-                  ) : (
-                    icon
-                  )}
+                  <IconComponent className="h-8 w-8" />
                 </div>
                 <div>
                   <h3 className="font-[var(--font-heading)] text-lg font-bold text-text-dark group-hover:text-navy transition-colors">

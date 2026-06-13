@@ -1,3 +1,17 @@
+import React from 'react';
+import { 
+  Wrench, 
+  Zap, 
+  Shield, 
+  Flame, 
+  Disc, 
+  Cpu, 
+  Layers, 
+  Hammer, 
+  Activity, 
+  Package 
+} from 'lucide-react';
+
 export const SITE_CONFIG = {
   name: 'Shri Siddhi Vinayak Trading Co.',
   tagline: 'A House of Industrial Tools, Power Tools & Safety Equipment',
@@ -274,6 +288,24 @@ export function getMergedCategories(dbCategories: any[]): Category[] {
   });
   
   return merged.sort((a, b) => a.display_order - b.display_order);
+}
+
+export function getCategoryIcon(name: string, slug: string): React.ComponentType<{ className?: string }> {
+  const n = name.toLowerCase();
+  const s = slug.toLowerCase();
+  
+  if (n.includes('hand') || s.includes('hand') || n.includes('tool') || s.includes('tool')) return Wrench;
+  if (n.includes('power') || s.includes('power') || n.includes('drill') || s.includes('drill') || n.includes('grind') || s.includes('grind') || n.includes('machine') || s.includes('machine')) return Zap;
+  if (n.includes('safety') || s.includes('safety') || n.includes('helmet') || s.includes('helmet') || n.includes('goggle') || s.includes('goggle') || n.includes('harness') || s.includes('harness') || n.includes('shoe') || s.includes('shoe')) return Shield;
+  if (n.includes('weld') || s.includes('weld')) return Flame;
+  if (n.includes('abrasive') || s.includes('abrasive') || n.includes('disc') || s.includes('disc') || n.includes('wheel') || s.includes('wheel') || n.includes('cut') || s.includes('cut')) return Disc;
+  if (n.includes('electrical') || s.includes('electrical') || n.includes('cable') || s.includes('cable') || n.includes('wire') || s.includes('wire') || n.includes('switch') || s.includes('switch')) return Cpu;
+  if (n.includes('construction') || s.includes('construction') || n.includes('rope') || s.includes('rope') || n.includes('material') || s.includes('material') || n.includes('rigging') || s.includes('rigging') || n.includes('chain') || s.includes('chain') || n.includes('sling') || s.includes('sling')) return Layers;
+  if (n.includes('hardware') || s.includes('hardware') || n.includes('bolt') || n.includes('fastener') || n.includes('nut') || n.includes('screw') || n.includes('clamp') || n.includes('bracket')) return Hammer;
+  if (n.includes('measure') || s.includes('measure') || n.includes('instrument') || s.includes('instrument') || n.includes('meter') || s.includes('meter') || n.includes('multimeter') || s.includes('multimeter')) return Activity;
+  if (n.includes('consumable') || s.includes('consumable') || n.includes('tape') || s.includes('tape') || n.includes('glue') || s.includes('glue') || n.includes('adhesive') || s.includes('adhesive') || n.includes('sealant') || s.includes('sealant') || n.includes('lubricant') || s.includes('lubricant')) return Layers;
+  
+  return Package;
 }
 
 
