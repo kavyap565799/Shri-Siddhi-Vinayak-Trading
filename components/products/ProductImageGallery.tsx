@@ -10,20 +10,49 @@ interface ProductImageGalleryProps {
 
 export function ProductImageGallery({ allImages, name }: ProductImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
+  const [isZoomed, setIsZoomed] = useState(false);
 
   const activeImage = allImages[activeIndex];
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomPos({ x, y });
+    setIsZoomed(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsZoomed(false);
+  };
 
   return (
     <div>
       {/* Main Image */}
-      <div className="relative aspect-square overflow-hidden rounded-xl border border-border-light bg-white shadow-sm">
+      <div 
+        className="relative aspect-square overflow-hidden rounded-xl border border-border-light bg-white shadow-sm cursor-zoom-in"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
         {activeImage ? (
           <Image
             src={activeImage}
             alt={name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-contain p-4"
+            className="object-contain p-4 transition-transform duration-300 ease-out"
+            style={
+              isZoomed
+                ? {
+                    transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+                    transform: 'scale(1.8)',
+                  }
+                : {
+                    transformOrigin: 'center center',
+                    transform: 'scale(1)',
+                  }
+            }
             priority
           />
         ) : (
