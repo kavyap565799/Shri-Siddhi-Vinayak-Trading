@@ -142,8 +142,12 @@ export default function EditProductPage() {
       if (error) throw error;
       toast.success('Product updated successfully!');
       router.push('/admin/products');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to update product';
+    } catch (err: any) {
+      console.error('Update product error:', err);
+      let message = err?.message || 'Failed to update product';
+      if (message.includes('products_slug_key')) {
+        message = 'A product with this name or slug already exists. Please choose a different name or modify the slug.';
+      }
       toast.error(message);
     } finally {
       setSaving(false);
@@ -213,7 +217,9 @@ export default function EditProductPage() {
               onValueChange={(v: string | null) => setValue('brand_id', (v === 'none' || v === null) ? '' : v)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select brand" />
+                <SelectValue placeholder="Select brand">
+                  {watch('brand_id') ? brands.find(b => b.id === watch('brand_id'))?.name : undefined}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">No brand</SelectItem>
@@ -231,7 +237,9 @@ export default function EditProductPage() {
               onValueChange={(v: string | null) => setValue('category_id', (v === 'none' || v === null) ? '' : v)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder="Select category">
+                  {watch('category_id') ? categories.find(c => c.id === watch('category_id'))?.name : undefined}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">No category</SelectItem>

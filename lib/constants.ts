@@ -124,10 +124,12 @@ export function getMergedBrands(dbBrands: any[]): Brand[] {
   const merged: Brand[] = [];
   
   LOCAL_BRANDS.forEach(localBrand => {
-    const dbMatch = dbBrands.find(b => b.slug === localBrand.slug);
+    const dbMatch = dbBrands.find(b => b.id === localBrand.id || b.slug === localBrand.slug);
     merged.push({
       ...localBrand,
       id: dbMatch ? dbMatch.id : localBrand.id,
+      name: dbMatch ? dbMatch.name : localBrand.name,
+      slug: dbMatch ? dbMatch.slug : localBrand.slug,
       description: dbMatch ? (dbMatch.description || localBrand.description) : localBrand.description,
       is_featured: dbMatch ? dbMatch.is_featured : localBrand.is_featured,
       display_order: dbMatch ? dbMatch.display_order : localBrand.display_order
@@ -135,7 +137,7 @@ export function getMergedBrands(dbBrands: any[]): Brand[] {
   });
   
   dbBrands.forEach(dbBrand => {
-    const localMatch = LOCAL_BRANDS.find(b => b.slug === dbBrand.slug);
+    const localMatch = LOCAL_BRANDS.find(b => b.id === dbBrand.id || b.slug === dbBrand.slug);
     if (!localMatch) {
       merged.push({
         id: dbBrand.id,
@@ -261,10 +263,12 @@ export function getMergedCategories(dbCategories: any[]): Category[] {
   const merged: Category[] = [];
   
   LOCAL_CATEGORIES.forEach(localCat => {
-    const dbMatch = dbCategories.find(c => c.slug === localCat.slug);
+    const dbMatch = dbCategories.find(c => c.id === localCat.id || c.slug === localCat.slug);
     merged.push({
       ...localCat,
       id: dbMatch ? dbMatch.id : localCat.id,
+      name: dbMatch ? dbMatch.name : localCat.name,
+      slug: dbMatch ? dbMatch.slug : localCat.slug,
       description: dbMatch ? (dbMatch.description || localCat.description) : localCat.description,
       icon_url: dbMatch ? (dbMatch.icon_url || localCat.icon_url) : localCat.icon_url,
       parent_id: dbMatch ? dbMatch.parent_id : localCat.parent_id,
@@ -273,7 +277,7 @@ export function getMergedCategories(dbCategories: any[]): Category[] {
   });
   
   dbCategories.forEach(dbCat => {
-    const localMatch = LOCAL_CATEGORIES.find(c => c.slug === dbCat.slug);
+    const localMatch = LOCAL_CATEGORIES.find(c => c.id === dbCat.id || c.slug === dbCat.slug);
     if (!localMatch) {
       merged.push({
         id: dbCat.id,

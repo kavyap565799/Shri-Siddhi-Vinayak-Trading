@@ -44,11 +44,14 @@ export default function NewCategoryPage() {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<CategoryForm>({
     resolver: zodResolver(categorySchema),
     defaultValues: { display_order: 0, parent_id: null },
   });
+
+  const parentId = watch('parent_id');
 
   useEffect(() => {
     const fetchParents = async () => {
@@ -85,8 +88,12 @@ export default function NewCategoryPage() {
       if (error) throw error;
       toast.success('Category created successfully!');
       router.push('/admin/categories');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to create category';
+    } catch (err: any) {
+      console.error('Create category error:', err);
+      let message = err?.message || 'Failed to create category';
+      if (message.includes('categories_slug_key')) {
+        message = 'A category with this name or slug already exists. Please choose a different name or modify the slug.';
+      }
       toast.error(message);
     } finally {
       setSaving(false);
@@ -131,10 +138,13 @@ export default function NewCategoryPage() {
         <div className="space-y-2">
           <Label>Parent Category (optional)</Label>
           <Select
+            value={parentId || 'none'}
             onValueChange={(v: string | null) => setValue('parent_id', (v === 'none' || v === null) ? null : v)}
           >
             <SelectTrigger>
-              <SelectValue placeholder="No parent (top-level)" />
+              <SelectValue placeholder="No parent (top-level)">
+                {parentId ? parentCategories.find(c => c.id === parentId)?.name : undefined}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">No parent (top-level)</SelectItem>

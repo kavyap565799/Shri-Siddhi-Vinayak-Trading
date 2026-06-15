@@ -118,8 +118,12 @@ export default function EditCategoryPage() {
       if (error) throw error;
       toast.success('Category updated successfully!');
       router.push('/admin/categories');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to update category';
+    } catch (err: any) {
+      console.error('Update category error:', err);
+      let message = err?.message || 'Failed to update category';
+      if (message.includes('categories_slug_key')) {
+        message = 'A category with this name or slug already exists. Please choose a different name or modify the slug.';
+      }
       toast.error(message);
     } finally {
       setSaving(false);
@@ -176,7 +180,9 @@ export default function EditCategoryPage() {
             onValueChange={(v: string | null) => setValue('parent_id', (v === 'none' || v === null) ? null : v)}
           >
             <SelectTrigger>
-              <SelectValue placeholder="No parent (top-level)" />
+              <SelectValue placeholder="No parent (top-level)">
+                {watch('parent_id') ? parentCategories.find(c => c.id === watch('parent_id'))?.name : undefined}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">No parent (top-level)</SelectItem>

@@ -7,6 +7,7 @@ export async function uploadImage(
 ): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
+  formData.append('bucket', bucket);
   formData.append('folder', folder || `shri-siddhi-vinayak/${bucket}`);
 
   const response = await fetch('/api/upload', {
@@ -16,7 +17,7 @@ export async function uploadImage(
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to upload image to Cloudinary');
+    throw new Error(errorData.error || 'Failed to upload image');
   }
 
   const data = await response.json();
@@ -27,22 +28,33 @@ export async function deleteImage(
   url: string,
   bucket: StorageBucket
 ): Promise<void> {
-  // Extract the public ID from the full Cloudinary URL
-  const parts = url.split('/upload/');
-  if (parts.length < 2) return;
+  let publicId = '';
+  let isSupabase = false;
 
-  let publicIdWithExt = parts[1];
-  if (publicIdWithExt.startsWith('v')) {
-    const nextSlash = publicIdWithExt.indexOf('/');
-    publicIdWithExt = publicIdWithExt.substring(nextSlash + 1);
+  if (url.includes('/storage/v1/object/public/')) {
+    isSupabase = true;
+    const matchString = `/storage/v1/object/public/${bucket}/`;
+    const index = url.indexOf(matchString);
+    if (index !== -1) {
+      publicId = url.substring(index + matchString.length);
+    }
+  } else {
+    const parts = url.split('/upload/');
+    if (parts.length >= 2) {
+      let publicIdWithExt = parts[1];
+      if (publicIdWithExt.startsWith('v')) {
+        const nextSlash = publicIdWithExt.indexOf('/');
+        publicIdWithExt = publicIdWithExt.substring(nextSlash + 1);
+      }
+      const lastDot = publicIdWithExt.lastIndexOf('.');
+      publicId = lastDot !== -1 ? publicIdWithExt.substring(0, lastDot) : publicIdWithExt;
+    }
   }
 
-  const lastDot = publicIdWithExt.lastIndexOf('.');
-  const publicId =
-    lastDot !== -1 ? publicIdWithExt.substring(0, lastDot) : publicIdWithExt;
+  if (!publicId) return;
 
   const response = await fetch(
-    `/api/upload?publicId=${encodeURIComponent(publicId)}`,
+    `/api/upload?publicId=${encodeURIComponent(publicId)}&bucket=${bucket}&isSupabase=${isSupabase}`,
     {
       method: 'DELETE',
     }
@@ -50,7 +62,7 @@ export async function deleteImage(
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to delete image from Cloudinary');
+    throw new Error(errorData.error || 'Failed to delete image');
   }
 }
 

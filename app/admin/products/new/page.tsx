@@ -55,11 +55,13 @@ export default function NewProductPage() {
     formState: { errors },
   } = useForm<ProductForm>({
     resolver: zodResolver(productSchema),
-    defaultValues: { is_featured: false, is_available: true },
+    defaultValues: { is_featured: false, is_available: true, brand_id: '', category_id: '' },
   });
 
   const isFeatured = watch('is_featured');
   const isAvailable = watch('is_available');
+  const brandId = watch('brand_id');
+  const categoryId = watch('category_id');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,9 +77,19 @@ export default function NewProductPage() {
   }, []);
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    register('name').onChange(e);
     const name = e.target.value;
-    setValue('name', name);
-    setValue('slug', toSlug(name));
+    const sku = watch('sku') || '';
+    const slugBase = sku ? `${name} ${sku}` : name;
+    setValue('slug', toSlug(slugBase));
+  };
+
+  const onSkuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    register('sku').onChange(e);
+    const sku = e.target.value;
+    const name = watch('name') || '';
+    const slugBase = sku ? `${name} ${sku}` : name;
+    setValue('slug', toSlug(slugBase));
   };
 
   const addSpec = () => setSpecs([...specs, { key: '', value: '' }]);
@@ -116,8 +128,12 @@ export default function NewProductPage() {
       if (error) throw error;
       toast.success('Product created successfully!');
       router.push('/admin/products');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to create product';
+    } catch (err: any) {
+      console.error('Create product error:', err);
+      let message = err?.message || 'Failed to create product';
+      if (message.includes('products_slug_key')) {
+        message = 'A product with this name or slug already exists. Please choose a different name or modify the slug.';
+      }
       toast.error(message);
     } finally {
       setSaving(false);
@@ -163,7 +179,12 @@ export default function NewProductPage() {
 
           <div className="space-y-2">
             <Label htmlFor="prod-sku">SKU / Model Number</Label>
-            <Input id="prod-sku" {...register('sku')} placeholder="e.g. GSB-500RE" />
+            <Input
+              id="prod-sku"
+              {...register('sku')}
+              onChange={onSkuChange}
+              placeholder="e.g. GSB-500RE"
+            />
           </div>
         </div>
 
@@ -195,9 +216,14 @@ export default function NewProductPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label>Brand</Label>
-            <Select onValueChange={(v: string | null) => setValue('brand_id', (v === 'none' || v === null) ? '' : v)}>
+            <Select
+              value={brandId || 'none'}
+              onValueChange={(v: string | null) => setValue('brand_id', (v === 'none' || v === null) ? '' : v)}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="Select brand" />
+                <SelectValue placeholder="Select brand">
+                  {brandId ? brands.find(b => b.id === brandId)?.name : undefined}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">No brand</SelectItem>
@@ -212,9 +238,14 @@ export default function NewProductPage() {
 
           <div className="space-y-2">
             <Label>Category</Label>
-            <Select onValueChange={(v: string | null) => setValue('category_id', (v === 'none' || v === null) ? '' : v)}>
+            <Select
+              value={categoryId || 'none'}
+              onValueChange={(v: string | null) => setValue('category_id', (v === 'none' || v === null) ? '' : v)}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder="Select category">
+                  {categoryId ? categories.find(c => c.id === categoryId)?.name : undefined}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">No category</SelectItem>

@@ -67,8 +67,12 @@ export default function NewBrandPage() {
       if (error) throw error;
       toast.success('Brand created successfully!');
       router.push('/admin/brands');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to create brand';
+    } catch (err: any) {
+      console.error('Create brand error:', err);
+      let message = err?.message || 'Failed to create brand';
+      if (message.includes('brands_slug_key')) {
+        message = 'A brand with this name or slug already exists. Please choose a different name or modify the slug.';
+      }
       toast.error(message);
     } finally {
       setSaving(false);
