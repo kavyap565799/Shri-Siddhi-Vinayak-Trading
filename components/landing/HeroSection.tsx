@@ -40,7 +40,7 @@ export function HeroSection() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-navy/10 bg-white px-4 py-2 shadow-sm">
             <span className="h-2 w-2 rounded-full bg-whatsapp animate-pulse" />
             <span className="text-xs font-medium text-text-muted">
-              25+ Years of Trusted Service
+              15+ Years of Trusted Service
             </span>
           </div>
 
@@ -159,7 +159,7 @@ export function HeroSection() {
               transition={{ delay: 0.8, duration: 0.5 }}
               className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-navy px-6 py-2 text-sm font-semibold text-white shadow-lg"
             >
-              📍 Godhra, Gujarat
+              📍 Motikhavdi, Jamnagar
             </motion.div>
           </div>
         </motion.div>

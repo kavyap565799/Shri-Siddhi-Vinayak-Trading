@@ -5,7 +5,7 @@ import { EnquirySection } from '@/components/landing/EnquirySection';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with Shri Siddhi Vinayak Trading Co. — Visit us in Godhra, Gujarat or reach out via phone or WhatsApp.',
+  description: 'Get in touch with Shri Siddhi Vinayak Trading Co. — Visit us in Motikhavdi, Jamnagar, Gujarat or reach out via phone or WhatsApp.',
 };
 
 export default function ContactPage() {
@@ -72,8 +72,72 @@ export default function ContactPage() {
             <h3 className="font-[var(--font-heading)] text-sm font-bold text-text-dark">
               Working Hours
             </h3>
-            <p className="mt-2 text-sm text-text-muted">Mon - Sat: 9 AM - 8 PM</p>
-            <p className="text-sm text-text-muted">Sunday: Closed</p>
+            <p className="mt-2 text-sm text-text-muted">Mon - Sat: 8 AM - 8 PM</p>
+            <p className="text-sm text-text-muted">Sunday: 8 AM - 2 PM</p>
+          </div>
+        </div>
+
+        {/* Map Section */}
+        <div className="mb-16 rounded-2xl border border-border-light bg-white p-6 shadow-sm">
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Map Info Column */}
+            <div className="lg:col-span-1 flex flex-col justify-between">
+              <div>
+                <h2 className="font-[var(--font-heading)] text-2xl font-bold text-text-dark">
+                  Find Our Shop
+                </h2>
+                <p className="mt-2 text-sm text-text-muted">
+                  We are conveniently located on the Jamnagar-Khambhaliya Highway in Motikhavdi, right near Meera Hotel. Come visit us for all your industrial, welding, power tools, and safety equipment needs.
+                </p>
+                <div className="mt-6 space-y-4">
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 rounded bg-orange/10 p-1.5 text-orange shrink-0">
+                      <MapPin className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-xs font-semibold text-text-dark uppercase tracking-wider">Address</p>
+                      <p className="text-sm text-text-muted mt-0.5">{SITE_CONFIG.contact.address}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 rounded bg-navy/5 p-1.5 text-navy shrink-0">
+                      <Clock className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-xs font-semibold text-text-dark uppercase tracking-wider">Store Hours</p>
+                      <p className="text-sm text-text-muted mt-0.5">Mon - Sat: 8:00 AM - 8:00 PM</p>
+                      <p className="text-sm text-text-muted font-semibold text-orange mt-0.5">Sunday: 8:00 AM - 2:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8 lg:mt-0">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Shri+Siddhi+Vinayak+Trading+Co.+Motikhavdi+Jamnagar"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-navy px-5 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-navy/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2"
+                >
+                  <MapPin className="h-4 w-4" />
+                  Get Directions on Google Maps
+                </a>
+              </div>
+            </div>
+            {/* Embed Map Column */}
+            <div className="lg:col-span-2">
+              <div className="relative h-[300px] w-full overflow-hidden rounded-xl border border-border-light bg-bg sm:h-[400px]">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4375.556103099812!2d69.87023687586867!3d22.401779639208332!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395717c003ecd603%3A0x2e0294216b7e1f71!2sShri%20Siddhi%20Vinayak%20Trading%20Co.!5e1!3m2!1sen!2sin!4v1781291868397!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0 h-full w-full"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

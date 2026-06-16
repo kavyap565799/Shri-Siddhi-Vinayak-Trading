@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
+import { getMergedBrands } from '@/lib/constants';
 import type { Brand } from '@/types';
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ export default async function BrandsPage() {
     .select('*')
     .order('display_order', { ascending: true });
 
-  const allBrands = (brands || []) as Brand[];
+  const allBrands = getMergedBrands(brands || []) as Brand[];
 
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">

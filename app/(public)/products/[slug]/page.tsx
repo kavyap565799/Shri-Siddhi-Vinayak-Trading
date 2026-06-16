@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, MessageCircle, Phone, Share2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
@@ -8,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { getWhatsAppProductUrl, SITE_CONFIG } from '@/lib/constants';
+import { ProductImageGallery } from '@/components/products/ProductImageGallery';
 import type { ProductWithRelations } from '@/types';
 
 interface Props {
@@ -79,42 +79,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
         <div className="grid gap-12 lg:grid-cols-2">
           {/* Images */}
-          <div>
-            <div className="relative aspect-square overflow-hidden rounded-xl border border-border-light bg-white shadow-sm">
-              {allImages[0] ? (
-                <Image
-                  src={allImages[0]}
-                  alt={typedProduct.name}
-                  fill
-                  className="object-contain p-4"
-                  priority
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center">
-                  <span className="text-6xl opacity-20">🔧</span>
-                </div>
-              )}
-            </div>
-
-            {/* Thumbnails */}
-            {allImages.length > 1 && (
-              <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
-                {allImages.map((img, i) => (
-                  <div
-                    key={i}
-                    className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-border-light bg-white"
-                  >
-                    <Image
-                      src={img}
-                      alt={`${typedProduct.name} - ${i + 1}`}
-                      fill
-                      className="object-contain p-1"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <ProductImageGallery allImages={allImages} name={typedProduct.name} />
 
           {/* Details */}
           <div>

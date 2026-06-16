@@ -65,7 +65,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 
   /* Brand scroll animation */
-  --animate-scroll: scroll 30s linear infinite;
+  --animate-scroll: scroll 75s linear infinite;
 
   @keyframes scroll {
     0% { transform: translateX(0); }

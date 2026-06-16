@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -34,10 +34,14 @@ const categorySchema = z.object({
 
 type CategoryForm = z.infer<typeof categorySchema>;
 
-export default function NewCategoryPage() {
+export default function EditCategoryPage() {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
+
   const [iconUrl, setIconUrl] = useState<string>('');
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [parentCategories, setParentCategories] = useState<Category[]>([]);
 
   const {
@@ -45,26 +49,49 @@ export default function NewCategoryPage() {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<CategoryForm>({
     resolver: zodResolver(categorySchema),
     defaultValues: { display_order: 0, parent_id: null },
   });
 
-  const parentId = watch('parent_id');
-
   useEffect(() => {
-    const fetchParents = async () => {
+    const fetchData = async () => {
       const supabase = createClient();
-      const { data } = await supabase
-        .from('categories')
-        .select('*')
-        .is('parent_id', null)
-        .order('name');
-      setParentCategories((data || []) as Category[]);
+      const [categoryRes, parentsRes] = await Promise.all([
+        supabase.from('categories').select('*').eq('id', id).single(),
+        supabase.from('categories').select('*').is('parent_id', null).order('name'),
+      ]);
+
+      if (categoryRes.error) {
+        toast.error('Failed to load category');
+        router.push('/admin/categories');
+        return;
+      }
+
+      if (categoryRes.data) {
+        const c = categoryRes.data as Category;
+        reset({
+          name: c.name,
+          slug: c.slug,
+          description: c.description || '',
+          parent_id: c.parent_id || null,
+          display_order: c.display_order,
+        });
+        setIconUrl(c.icon_url || '');
+      }
+
+      // Filter out self from list of potential parent categories
+      const filteredParents = (parentsRes.data || []).filter(
+        (c) => c.id !== id
+      ) as Category[];
+      setParentCategories(filteredParents);
+      setLoading(false);
     };
-    fetchParents();
-  }, []);
+
+    fetchData();
+  }, [id, reset, router]);
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -76,21 +103,24 @@ export default function NewCategoryPage() {
     setSaving(true);
     try {
       const supabase = createClient();
-      const { error } = await supabase.from('categories').insert({
-        name: data.name,
-        slug: data.slug,
-        description: data.description || null,
-        icon_url: iconUrl || null,
-        parent_id: data.parent_id || null,
-        display_order: data.display_order,
-      });
+      const { error } = await supabase
+        .from('categories')
+        .update({
+          name: data.name,
+          slug: data.slug,
+          description: data.description || null,
+          icon_url: iconUrl || null,
+          parent_id: data.parent_id || null,
+          display_order: data.display_order,
+        })
+        .eq('id', id);
 
       if (error) throw error;
-      toast.success('Category created successfully!');
+      toast.success('Category updated successfully!');
       router.push('/admin/categories');
     } catch (err: any) {
-      console.error('Create category error:', err);
-      let message = err?.message || 'Failed to create category';
+      console.error('Update category error:', err);
+      let message = err?.message || 'Failed to update category';
       if (message.includes('categories_slug_key')) {
         message = 'A category with this name or slug already exists. Please choose a different name or modify the slug.';
       }
@@ -99,6 +129,14 @@ export default function NewCategoryPage() {
       setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-navy" />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -110,7 +148,7 @@ export default function NewCategoryPage() {
       </Link>
 
       <h1 className="mb-6 font-[var(--font-heading)] text-2xl font-extrabold text-text-dark">
-        Create New Category
+        Edit Category
       </h1>
 
       <form
@@ -138,12 +176,12 @@ export default function NewCategoryPage() {
         <div className="space-y-2">
           <Label>Parent Category (optional)</Label>
           <Select
-            value={parentId || 'none'}
+            value={watch('parent_id') || 'none'}
             onValueChange={(v: string | null) => setValue('parent_id', (v === 'none' || v === null) ? null : v)}
           >
             <SelectTrigger>
               <SelectValue placeholder="No parent (top-level)">
-                {parentId ? parentCategories.find(c => c.id === parentId)?.name : undefined}
+                {watch('parent_id') ? parentCategories.find(c => c.id === watch('parent_id'))?.name : undefined}
               </SelectValue>
             </SelectTrigger>
             <SelectContent>
@@ -191,7 +229,7 @@ export default function NewCategoryPage() {
           disabled={saving}
           className="w-full bg-navy hover:bg-navy-light text-white font-semibold h-11"
         >
-          {saving ? 'Saving...' : 'Create Category'}
+          {saving ? 'Saving...' : 'Update Category'}
         </Button>
       </form>
     </div>

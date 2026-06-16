@@ -12,7 +12,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className="group overflow-hidden rounded-xl border border-border-light bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+    <div className="group overflow-hidden rounded-xl border border-border-light bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg h-full flex flex-col">
       {/* Image */}
       <Link
         href={`/products/${product.slug}`}
@@ -23,6 +23,7 @@ export function ProductCard({ product }: ProductCardProps) {
             src={product.primary_image_url}
             alt={product.name}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-110"
           />
         ) : (
@@ -56,31 +57,33 @@ export function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       {/* Content */}
-      <div className="p-4">
-        {product.category && (
-          <Link
-            href={`/categories/${product.category.slug}`}
-            className="text-xs font-medium text-orange hover:text-orange-dark transition-colors"
-          >
-            {product.category.name}
+      <div className="p-4 flex-1 flex flex-col justify-between">
+        <div>
+          {product.category && (
+            <Link
+              href={`/categories/${product.category.slug}`}
+              className="text-xs font-medium text-orange hover:text-orange-dark transition-colors"
+            >
+              {product.category.name}
+            </Link>
+          )}
+
+          <Link href={`/products/${product.slug}`}>
+            <h3 className="mt-1 font-[var(--font-heading)] text-sm font-bold text-text-dark line-clamp-2 group-hover:text-navy transition-colors">
+              {product.name}
+            </h3>
           </Link>
-        )}
 
-        <Link href={`/products/${product.slug}`}>
-          <h3 className="mt-1 font-[var(--font-heading)] text-sm font-bold text-text-dark line-clamp-2 group-hover:text-navy transition-colors">
-            {product.name}
-          </h3>
-        </Link>
+          {product.sku && (
+            <p className="mt-1 text-xs text-text-muted">SKU: {product.sku}</p>
+          )}
 
-        {product.sku && (
-          <p className="mt-1 text-xs text-text-muted">SKU: {product.sku}</p>
-        )}
-
-        {product.price_display && (
-          <p className="mt-2 text-sm font-semibold text-navy">
-            {product.price_display}
-          </p>
-        )}
+          {product.price_display && (
+            <p className="mt-2 text-sm font-semibold text-navy">
+              {product.price_display}
+            </p>
+          )}
+        </div>
 
         <div className="mt-3 flex gap-2">
           <Button

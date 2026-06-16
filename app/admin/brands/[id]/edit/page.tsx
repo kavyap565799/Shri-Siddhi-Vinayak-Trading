@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,6 +16,7 @@ import { Switch } from '@/components/ui/switch';
 import { ImageUpload } from '@/components/admin/ImageUpload';
 import { createClient } from '@/lib/supabase/client';
 import { toSlug } from '@/lib/utils';
+import type { Brand } from '@/types';
 
 const brandSchema = z.object({
   name: z.string().min(1, 'Brand name is required'),
@@ -27,16 +28,21 @@ const brandSchema = z.object({
 
 type BrandForm = z.infer<typeof brandSchema>;
 
-export default function NewBrandPage() {
+export default function EditBrandPage() {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
+
   const [logoUrl, setLogoUrl] = useState<string>('');
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const {
     register,
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<BrandForm>({
     resolver: zodResolver(brandSchema),
@@ -44,6 +50,38 @@ export default function NewBrandPage() {
   });
 
   const isFeatured = watch('is_featured');
+
+  useEffect(() => {
+    const fetchBrand = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from('brands')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        toast.error('Failed to load brand');
+        router.push('/admin/brands');
+        return;
+      }
+
+      if (data) {
+        const b = data as Brand;
+        reset({
+          name: b.name,
+          slug: b.slug,
+          description: b.description || '',
+          is_featured: b.is_featured,
+          display_order: b.display_order,
+        });
+        setLogoUrl(b.logo_url || '');
+      }
+      setLoading(false);
+    };
+
+    fetchBrand();
+  }, [id, reset, router]);
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -55,21 +93,24 @@ export default function NewBrandPage() {
     setSaving(true);
     try {
       const supabase = createClient();
-      const { error } = await supabase.from('brands').insert({
-        name: data.name,
-        slug: data.slug,
-        description: data.description || null,
-        logo_url: logoUrl || null,
-        is_featured: data.is_featured,
-        display_order: data.display_order,
-      });
+      const { error } = await supabase
+        .from('brands')
+        .update({
+          name: data.name,
+          slug: data.slug,
+          description: data.description || null,
+          logo_url: logoUrl || null,
+          is_featured: data.is_featured,
+          display_order: data.display_order,
+        })
+        .eq('id', id);
 
       if (error) throw error;
-      toast.success('Brand created successfully!');
+      toast.success('Brand updated successfully!');
       router.push('/admin/brands');
     } catch (err: any) {
-      console.error('Create brand error:', err);
-      let message = err?.message || 'Failed to create brand';
+      console.error('Update brand error:', err);
+      let message = err?.message || 'Failed to update brand';
       if (message.includes('brands_slug_key')) {
         message = 'A brand with this name or slug already exists. Please choose a different name or modify the slug.';
       }
@@ -78,6 +119,14 @@ export default function NewBrandPage() {
       setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-navy" />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -89,7 +138,7 @@ export default function NewBrandPage() {
       </Link>
 
       <h1 className="mb-6 font-[var(--font-heading)] text-2xl font-extrabold text-text-dark">
-        Create New Brand
+        Edit Brand
       </h1>
 
       <form
@@ -162,7 +211,7 @@ export default function NewBrandPage() {
           disabled={saving}
           className="w-full bg-navy hover:bg-navy-light text-white font-semibold h-11"
         >
-          {saving ? 'Saving...' : 'Create Brand'}
+          {saving ? 'Saving...' : 'Update Brand'}
         </Button>
       </form>
     </div>

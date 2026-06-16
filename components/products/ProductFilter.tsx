@@ -36,7 +36,7 @@ export function ProductFilter({
   const updateFilter = useCallback(
     (key: string, value: string | null) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (value && value !== 'all') {
+      if (value && value !== 'Brand' && value !== 'Categories' && value !== 'all') {
         params.set(key, value);
       } else {
         params.delete(key);
@@ -73,14 +73,14 @@ export function ProductFilter({
 
       {/* Brand Filter */}
       <Select
-        value={currentBrand || 'all'}
+        value={currentBrand || 'Brand'}
         onValueChange={(v) => updateFilter('brand', v)}
       >
         <SelectTrigger className="w-full sm:w-44 border-border-light">
-          <SelectValue placeholder="All Brands" />
+          <SelectValue placeholder="Brand" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">All Brands</SelectItem>
+          <SelectItem value="Brand">Brand</SelectItem>
           {brands.map((brand) => (
             <SelectItem key={brand.id} value={brand.slug}>
               {brand.name}
@@ -91,14 +91,14 @@ export function ProductFilter({
 
       {/* Category Filter */}
       <Select
-        value={currentCategory || 'all'}
+        value={currentCategory || 'Categories'}
         onValueChange={(v) => updateFilter('category', v)}
       >
         <SelectTrigger className="w-full sm:w-44 border-border-light">
-          <SelectValue placeholder="All Categories" />
+          <SelectValue placeholder="Categories" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">All Categories</SelectItem>
+          <SelectItem value="Categories">Categories</SelectItem>
           {categories.map((cat) => (
             <SelectItem key={cat.id} value={cat.slug}>
               {cat.name}

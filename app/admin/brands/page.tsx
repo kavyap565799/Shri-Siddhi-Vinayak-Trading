@@ -100,6 +100,16 @@ export default function AdminBrandsPage() {
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
                       <Button
+                        asChild
+                        variant="ghost"
+                        size="icon"
+                        className="text-navy hover:bg-navy/5"
+                      >
+                        <Link href={`/admin/brands/${brand.id}/edit`}>
+                          <Pencil className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => deleteBrand(brand.id)}
