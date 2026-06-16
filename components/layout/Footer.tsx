@@ -115,10 +115,35 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 border-t border-white/10 pt-8 text-center">
+        <div className="mt-12 border-t border-white/10 pt-8 text-center space-y-3">
           <p className="text-xs text-white/50">
             © {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.
           </p>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-6 text-xs text-white/50">
+            <p>
+              Powered By{' '}
+              <a
+                href="https://snapai.live/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-orange transition-colors font-medium"
+              >
+                @SnapAi
+              </a>
+            </p>
+            <p className="hidden sm:inline text-white/10">|</p>
+            <p>
+              Created by{' '}
+              <a
+                href="https://www.linkedin.com/in/krishkumargupta/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-orange transition-colors font-medium"
+              >
+                @Krish Kumar Gupta
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
