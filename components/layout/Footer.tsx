@@ -123,24 +123,33 @@ export function Footer() {
             <p>
               Powered By{' '}
               <a
-                href="https://snapai.live/"
+                href="https://www.instagram.com/stacklyy/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-orange transition-colors font-medium"
               >
-                @SnapAi
+                @stacklyy
               </a>
             </p>
             <p className="hidden sm:inline text-white/10">|</p>
             <p>
               Created by{' '}
               <a
-                href="https://www.linkedin.com/in/krishkumargupta/"
+                href="https://www.linkedin.com/in/kavya-patel-569296376/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-orange transition-colors font-medium"
               >
-                @Krish Kumar Gupta
+                @kavyaPatel
+              </a>
+              {' & '}
+              <a
+                href="https://www.linkedin.com/in/darshan-jaladkar-5725a138a/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-orange transition-colors font-medium"
+              >
+                @DarshanJaladkar
               </a>
             </p>
           </div>
