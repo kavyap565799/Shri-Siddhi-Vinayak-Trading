@@ -142,7 +142,7 @@ export function Footer() {
               >
                 @kavyaPatel
               </a>
-              {' & '}
+              
               <a
                 href="https://www.linkedin.com/in/darshan-jaladkar-5725a138a/"
                 target="_blank"
