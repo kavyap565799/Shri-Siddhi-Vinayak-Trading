@@ -27,7 +27,7 @@ const brandSchema = z.object({
 
 type BrandForm = z.infer<typeof brandSchema>;
 
-export default function NewBrandPage() {
+export default function NewBrandPage() {  
   const router = useRouter();
   const [logoUrl, setLogoUrl] = useState<string>('');
   const [saving, setSaving] = useState(false);

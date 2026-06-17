@@ -36,7 +36,7 @@ export function ProductFilter({
   const updateFilter = useCallback(
     (key: string, value: string | null) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (value && value !== 'Brand' && value !== 'Categories' && value !== 'all') {
+      if (value && value !== 'all') {
         params.set(key, value);
       } else {
         params.delete(key);
@@ -73,14 +73,18 @@ export function ProductFilter({
 
       {/* Brand Filter */}
       <Select
-        value={currentBrand || 'Brand'}
+        value={currentBrand || 'all'}
         onValueChange={(v) => updateFilter('brand', v)}
       >
         <SelectTrigger className="w-full sm:w-44 border-border-light">
-          <SelectValue placeholder="Brand" />
+          <SelectValue placeholder="Brand">
+            {currentBrand && currentBrand !== 'all'
+              ? brands.find((b) => b.slug === currentBrand)?.name
+              : 'Brand'}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Brand">Brand</SelectItem>
+          <SelectItem value="all">Brand</SelectItem>
           {brands.map((brand) => (
             <SelectItem key={brand.id} value={brand.slug}>
               {brand.name}
@@ -91,14 +95,18 @@ export function ProductFilter({
 
       {/* Category Filter */}
       <Select
-        value={currentCategory || 'Categories'}
+        value={currentCategory || 'all'}
         onValueChange={(v) => updateFilter('category', v)}
       >
         <SelectTrigger className="w-full sm:w-44 border-border-light">
-          <SelectValue placeholder="Categories" />
+          <SelectValue placeholder="Categories">
+            {currentCategory && currentCategory !== 'all'
+              ? categories.find((c) => c.slug === currentCategory)?.name
+              : 'Categories'}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Categories">Categories</SelectItem>
+          <SelectItem value="all">Categories</SelectItem>
           {categories.map((cat) => (
             <SelectItem key={cat.id} value={cat.slug}>
               {cat.name}
