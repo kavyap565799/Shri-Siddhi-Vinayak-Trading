@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Plus, Trash2, Pencil, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Pencil, Loader2, Sparkles, Search, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -20,6 +21,17 @@ import type { ProductWithRelations } from '@/types';
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<ProductWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredProducts = products.filter((product) => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      product.name.toLowerCase().includes(searchLower) ||
+      (product.sku && product.sku.toLowerCase().includes(searchLower)) ||
+      (product.brand?.name && product.brand.name.toLowerCase().includes(searchLower)) ||
+      (product.category?.name && product.category.name.toLowerCase().includes(searchLower))
+    );
+  });
 
   const fetchProducts = async () => {
     const supabase = createClient();
@@ -65,17 +77,53 @@ export default function AdminProductsPage() {
         <h1 className="font-[var(--font-heading)] text-2xl font-extrabold text-text-dark">
           Products
         </h1>
-        <Button asChild className="bg-navy hover:bg-navy-light text-white">
-          <Link href="/admin/products/new">
-            <Plus className="mr-2 h-4 w-4" /> Add Product
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button asChild variant="outline" className="border-navy text-navy hover:bg-navy/5">
+            <Link href="/admin/products/bulk-import">
+              <Sparkles className="mr-2 h-4 w-4" /> AI Bulk Import
+            </Link>
+          </Button>
+          <Button asChild className="bg-navy hover:bg-navy-light text-white">
+            <Link href="/admin/products/new">
+              <Plus className="mr-2 h-4 w-4" /> Add Product
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Search Bar */}
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative w-full max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by name, SKU, brand, or category..."
+            className="pl-9 pr-8 text-sm border-border-light focus-visible:ring-navy/20 focus-visible:border-navy/50 bg-white"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 hover:bg-gray-100 rounded-full text-text-muted transition-colors"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+        <div className="text-xs text-text-muted font-medium">
+          {searchQuery ? (
+            <span>Showing {filteredProducts.length} of {products.length} products</span>
+          ) : (
+            <span>Total {products.length} products</span>
+          )}
+        </div>
       </div>
 
       <div className="rounded-xl border border-border-light bg-white shadow-sm overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-12 text-center">#</TableHead>
               <TableHead>Product</TableHead>
               <TableHead>Brand</TableHead>
               <TableHead>Category</TableHead>
@@ -84,21 +132,40 @@ export default function AdminProductsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.length === 0 ? (
+            {filteredProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-text-muted">
-                  No products added yet
+                <TableCell colSpan={6} className="text-center py-8 text-text-muted">
+                  {searchQuery ? 'No products match your search' : 'No products added yet'}
                 </TableCell>
               </TableRow>
             ) : (
-              products.map((product) => (
+              filteredProducts.map((product, index) => (
                 <TableRow key={product.id}>
+                  <TableCell className="text-center text-xs font-semibold text-text-muted">
+                    {index + 1}
+                  </TableCell>
                   <TableCell>
-                    <div>
-                      <p className="font-medium text-text-dark">{product.name}</p>
-                      {product.sku && (
-                        <p className="text-xs text-text-muted">SKU: {product.sku}</p>
-                      )}
+                    <div className="flex items-center gap-3">
+                      <div className="relative h-10 w-10 overflow-hidden rounded border border-border-light bg-gray-50 flex items-center justify-center shrink-0">
+                        {product.primary_image_url || (Array.isArray(product.images) && product.images[0]) ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={product.primary_image_url || (Array.isArray(product.images) && product.images[0]) || ''}
+                            alt={product.name}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="text-[9px] text-text-muted/40 font-bold uppercase select-none">
+                            No Img
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-text-dark">{product.name}</p>
+                        {product.sku && (
+                          <p className="text-xs text-text-muted">SKU: {product.sku}</p>
+                        )}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell className="text-sm text-text-muted">

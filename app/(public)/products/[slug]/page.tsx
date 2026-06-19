@@ -48,7 +48,29 @@ export default async function ProductDetailPage({ params }: Props) {
   if (!product) notFound();
 
   const typedProduct = product as ProductWithRelations;
-  const specs = typedProduct.specifications || {};
+  
+  // Robust normalization of specifications to Record<string, string>
+  const rawSpecs = typedProduct.specifications;
+  const specs: Record<string, string> = {};
+  if (rawSpecs) {
+    if (Array.isArray(rawSpecs)) {
+      rawSpecs.forEach((s: any) => {
+        if (s && typeof s === 'object') {
+          const key = s.key || s.name || '';
+          const value = s.value || s.val || '';
+          if (key.toString().trim()) {
+            specs[key.toString().trim()] = String(value).trim();
+          }
+        }
+      });
+    } else if (typeof rawSpecs === 'object') {
+      Object.entries(rawSpecs).forEach(([key, value]) => {
+        if (key.trim()) {
+          specs[key.trim()] = String(value).trim();
+        }
+      });
+    }
+  }
   const images = typedProduct.images || [];
   const allImages = typedProduct.primary_image_url
     ? [typedProduct.primary_image_url, ...images.filter((img) => img !== typedProduct.primary_image_url)]

@@ -2,9 +2,10 @@
 
 import { useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
-import { Upload, X, Loader2 } from 'lucide-react';
+import { Upload, X, Loader2, Clipboard } from 'lucide-react';
 import { uploadImage, type StorageBucket } from '@/lib/supabase/storage';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface ImageUploadProps {
   bucket: StorageBucket;
@@ -105,6 +106,41 @@ export function ImageUpload({
     [uploadFiles, uploading]
   );
 
+  const handleClipboardPaste = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (uploading) return;
+
+      try {
+        const clipboardItems = await navigator.clipboard.read();
+        const files: File[] = [];
+        for (const item of clipboardItems) {
+          for (const type of item.types) {
+            if (type.startsWith('image/')) {
+              const blob = await item.getType(type);
+              const ext = type.split('/')[1] || 'png';
+              const file = new File([blob], `pasted-image-${Date.now()}.${ext}`, { type });
+              files.push(file);
+            }
+          }
+        }
+
+        if (files.length > 0) {
+          toast.loading('Uploading pasted image...', { id: 'image-paste' });
+          await uploadFiles(files);
+          toast.success('Pasted image uploaded successfully!', { id: 'image-paste' });
+        } else {
+          toast.error('No image found in clipboard. Please copy an image first.', { id: 'image-paste' });
+        }
+      } catch (err: any) {
+        console.error('Clipboard paste failed:', err);
+        toast.error('Failed to read clipboard. Please ensure clipboard access is granted.', { id: 'image-paste' });
+      }
+    },
+    [uploadFiles, uploading]
+  );
+
   const triggerFileInput = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -150,13 +186,19 @@ export function ImageUpload({
       )}
 
       {/* Upload area */}
-      <label
+      <div
         tabIndex={0}
         onKeyDown={(e) => {
           if (e.key === ' ' || e.key === 'Enter') {
             e.preventDefault();
             triggerFileInput();
           }
+        }}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).closest('button')) {
+            return;
+          }
+          triggerFileInput();
         }}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -191,8 +233,34 @@ export function ImageUpload({
             ? 'Click, Drag & Drop, or Paste to upload images'
             : 'Click, Drag & Drop, or Paste to upload image'}
         </p>
-        <p className="text-xs text-text-muted/60">PNG, JPG, WebP up to 5MB (Ctrl+V to paste)</p>
-      </label>
+
+        {!uploading && !isDragging && (
+          <div className="mt-3 flex items-center gap-3">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                triggerFileInput();
+              }}
+              className="flex items-center gap-1.5 rounded-md border border-border-light bg-white px-3 py-1.5 text-xs font-semibold text-text-dark shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-navy/20"
+            >
+              <Upload className="h-3.5 w-3.5" />
+              Upload Photo
+            </button>
+            <button
+              type="button"
+              onClick={handleClipboardPaste}
+              className="flex items-center gap-1.5 rounded-md border border-border-light bg-white px-3 py-1.5 text-xs font-semibold text-text-dark shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-navy/20"
+            >
+              <Clipboard className="h-3.5 w-3.5 text-navy" />
+              Paste Photo
+            </button>
+          </div>
+        )}
+
+        <p className="mt-2 text-xs text-text-muted/60">PNG, JPG, WebP up to 5MB (Ctrl+V to paste when focused)</p>
+      </div>
     </div>
   );
 }
