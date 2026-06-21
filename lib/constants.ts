@@ -23,6 +23,8 @@ export const SITE_CONFIG = {
     phone2: '96385 30022',
     phone1Link: 'tel:+919638530020',
     phone2Link: 'tel:+919638530022',
+    email: 'shrisiddhivinayaktrading.co12@gmail.com',
+    emailLink: 'mailto:shrisiddhivinayaktrading.co12@gmail.com',
     address: 'Shop No.2, Kailash Complex, Jamnagar Khambhaliya Highway, nr. Meera Hotel, Motikhavdi, Nani Khavdi, Gujarat 361140',
   },
   whatsapp: {

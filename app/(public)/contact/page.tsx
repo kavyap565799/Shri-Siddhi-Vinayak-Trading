@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { MapPin, Phone, MessageCircle, Clock } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, Clock, Mail } from 'lucide-react';
 import { SITE_CONFIG, getWhatsAppUrl } from '@/lib/constants';
 import { EnquirySection } from '@/components/landing/EnquirySection';
 
@@ -22,7 +22,7 @@ export default function ContactPage() {
         </div>
 
         {/* Contact Cards */}
-        <div className="mb-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <div className="rounded-xl border border-border-light bg-white p-6 text-center shadow-sm">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-navy/5">
               <MapPin className="h-6 w-6 text-navy" />
@@ -66,6 +66,21 @@ export default function ContactPage() {
           </div>
 
           <div className="rounded-xl border border-border-light bg-white p-6 text-center shadow-sm">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-orange/5">
+              <Mail className="h-6 w-6 text-orange" />
+            </div>
+            <h3 className="font-[var(--font-heading)] text-sm font-bold text-text-dark">
+              Email Us
+            </h3>
+            <a
+              href={SITE_CONFIG.contact.emailLink}
+              className="mt-2 block text-sm text-text-muted hover:text-navy break-all"
+            >
+              {SITE_CONFIG.contact.email}
+            </a>
+          </div>
+
+          <div className="rounded-xl border border-border-light bg-white p-6 text-center shadow-sm">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
               <Clock className="h-6 w-6 text-blue-600" />
             </div>
@@ -97,6 +112,20 @@ export default function ContactPage() {
                     <div>
                       <p className="text-xs font-semibold text-text-dark uppercase tracking-wider">Address</p>
                       <p className="text-sm text-text-muted mt-0.5">{SITE_CONFIG.contact.address}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 rounded bg-navy/5 p-1.5 text-navy shrink-0">
+                      <Mail className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-xs font-semibold text-text-dark uppercase tracking-wider">Email</p>
+                      <a
+                        href={SITE_CONFIG.contact.emailLink}
+                        className="text-sm text-text-muted hover:text-navy mt-0.5 block break-all"
+                      >
+                        {SITE_CONFIG.contact.email}
+                      </a>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">

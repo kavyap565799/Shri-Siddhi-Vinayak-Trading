@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
 import { SITE_CONFIG, NAV_LINKS, getWhatsAppUrl } from '@/lib/constants';
 
 export function Footer() {
@@ -100,7 +100,7 @@ export function Footer() {
                 </div>
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0 text-orange" />
+                <MessageCircle className="h-4 w-4 shrink-0 text-orange" />
                 <a
                   href={getWhatsAppUrl()}
                   target="_blank"
@@ -108,6 +108,15 @@ export function Footer() {
                   className="text-sm text-white/70 transition-colors hover:text-white"
                 >
                   WhatsApp Us
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 shrink-0 text-orange" />
+                <a
+                  href={SITE_CONFIG.contact.emailLink}
+                  className="text-sm text-white/70 transition-colors hover:text-white break-all"
+                >
+                  {SITE_CONFIG.contact.email}
                 </a>
               </li>
             </ul>

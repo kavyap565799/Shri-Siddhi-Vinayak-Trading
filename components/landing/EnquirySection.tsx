@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Send, MessageCircle, MapPin, Phone } from 'lucide-react';
+import { Send, MessageCircle, MapPin, Phone, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -110,6 +110,21 @@ export function EnquirySection() {
                     className="text-sm text-white/60 hover:text-white transition-colors"
                   >
                     Chat with us instantly
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10">
+                  <Mail className="h-5 w-5 text-orange" />
+                </div>
+                <div>
+                  <p className="font-semibold text-white">Email</p>
+                  <a
+                    href={SITE_CONFIG.contact.emailLink}
+                    className="text-sm text-white/60 hover:text-white transition-colors break-all"
+                  >
+                    {SITE_CONFIG.contact.email}
                   </a>
                 </div>
               </div>
